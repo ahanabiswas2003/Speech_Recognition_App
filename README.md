@@ -1,7 +1,7 @@
 This is a **Speech Recognition Web App** that allows users to upload or record audio and get the transcribed text. The application utilizes **Hugging Face Transformers** for speech-to-text conversion and is built using **Streamlit** for an interactive UI.
 
 ## Features
-- 🎙️ Upload or record audio.
+- 🎙️ Upload audio
 - 📜 Convert speech to text using **Hugging Face ASR models**.
 - 🖥️ User-friendly **Streamlit** interface.
 - ☁️ **Deployed on Streamlit Community Cloud** for free access.
