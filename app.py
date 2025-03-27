@@ -7,23 +7,22 @@ import soundfile as sf
 import os
 from pydub import AudioSegment
 import tempfile
+import librosa
 
 try:
     asyncio.get_running_loop()
 except RuntimeError:
     asyncio.set_event_loop(asyncio.new_event_loop())
 
-
 st.set_page_config(page_title="Speech Recognition", layout="centered")
 
-# Loading Hugging Face speech recognition model
 @st.cache_resource
 def load_model():
     return pipeline("automatic-speech-recognition", model="openai/whisper-small")
 
 asr_pipeline = load_model()
 
-st.title(" Speech Recognition App")
+st.title("Speech Recognition App")
 
 uploaded_file = st.file_uploader("Upload an audio file (WAV, MP3, FLAC)", type=["wav", "mp3", "flac"])
 
@@ -41,13 +40,13 @@ if uploaded_file:
 
     temp_audio_path = convert_to_mono(temp_audio_path)
 
-
-    audio_data, samplerate = sf.read(temp_audio_path)
+    # Load audio and trim to 30 seconds if necessary
+    audio_data, samplerate = librosa.load(temp_audio_path, sr=16000, duration=30)
 
     with st.spinner("Transcribing..."):
-        transcript = asr_pipeline({"array": audio_data, "sampling_rate": samplerate})["text"]
+        transcript = asr_pipeline({"array": audio_data, "sampling_rate": samplerate}, return_timestamps=True)
 
     st.subheader("Transcription Result:")
-    st.write(transcript)
+    st.write(transcript["text"])
 
     os.remove(temp_audio_path)

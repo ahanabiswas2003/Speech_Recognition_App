@@ -6,3 +6,5 @@ torchaudio
 pydub
 numpy
 ffmpeg-python
+librosa
+
