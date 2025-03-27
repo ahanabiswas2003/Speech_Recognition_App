@@ -7,7 +7,6 @@ import soundfile as sf
 import os
 from pydub import AudioSegment
 import tempfile
-import librosa
 
 try:
     asyncio.get_running_loop()
