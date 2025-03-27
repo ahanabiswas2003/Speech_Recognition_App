@@ -13,6 +13,7 @@ try:
 except RuntimeError:
     asyncio.set_event_loop(asyncio.new_event_loop())
 
+
 st.set_page_config(page_title="Speech Recognition", layout="centered")
 
 @st.cache_resource
@@ -21,7 +22,7 @@ def load_model():
 
 asr_pipeline = load_model()
 
-st.title("Speech Recognition App")
+st.title(" Speech Recognition App")
 
 uploaded_file = st.file_uploader("Upload an audio file (WAV, MP3, FLAC)", type=["wav", "mp3", "flac"])
 
@@ -39,13 +40,13 @@ if uploaded_file:
 
     temp_audio_path = convert_to_mono(temp_audio_path)
 
-    # Load audio and trim to 30 seconds if necessary
-    audio_data, samplerate = librosa.load(temp_audio_path, sr=16000, duration=30)
+
+    audio_data, samplerate = sf.read(temp_audio_path)
 
     with st.spinner("Transcribing..."):
-        transcript = asr_pipeline({"array": audio_data, "sampling_rate": samplerate}, return_timestamps=True)
+        transcript = asr_pipeline({"array": audio_data, "sampling_rate": samplerate})["text"]
 
     st.subheader("Transcription Result:")
-    st.write(transcript["text"])
+    st.write(transcript)
 
     os.remove(temp_audio_path)
