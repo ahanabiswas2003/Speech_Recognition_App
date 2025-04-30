@@ -65,7 +65,7 @@ Ensure your project is in a **public GitHub repository**.
 
 Your app will be live at:
 ```
-https://your-username-your-repo-name.streamlit.app
+https://speechrecognitionapp-y3h4mrecu2errwrfnxraea.streamlit.app/
 ```
 
 ---
