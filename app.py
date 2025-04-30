@@ -1,10 +1,7 @@
 import asyncio
 import streamlit as st
-import torch
-import torchaudio
 from transformers import pipeline
 import soundfile as sf
-import os
 import tempfile
 
 try:
@@ -24,21 +21,13 @@ st.title("🎙️ Speech Recognition App")
 
 uploaded_file = st.file_uploader("Upload an audio file (WAV, MP3, FLAC)", type=["wav", "mp3", "flac"])
 
-def convert_to_mono(file_path):
-    waveform, sample_rate = torchaudio.load(file_path)
-    if waveform.shape[0] > 1:  # Stereo to mono
-        waveform = waveform.mean(dim=0, keepdim=True)
-    mono_path = file_path.replace(file_path.split(".")[-1], "wav")
-    torchaudio.save(mono_path, waveform, sample_rate)
-    return mono_path
-
 if uploaded_file:
+  
     with tempfile.NamedTemporaryFile(delete=False, suffix=uploaded_file.name.split('.')[-1]) as temp_audio:
         temp_audio.write(uploaded_file.read())
         temp_audio_path = temp_audio.name
 
-    temp_audio_path = convert_to_mono(temp_audio_path)
-
+  
     audio_data, samplerate = sf.read(temp_audio_path)
 
     with st.spinner("Transcribing..."):
@@ -46,5 +35,3 @@ if uploaded_file:
 
     st.subheader(" Transcription Result:")
     st.write(transcript)
-
-    os.remove(temp_audio_path)
